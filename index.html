@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>لفروحة</title>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    overflow: hidden;
+    font-family: "Tahoma", sans-serif;
+
+    background:
+        radial-gradient(circle at 20% 20%, #f6c7a5 0%, transparent 35%),
+        radial-gradient(circle at 80% 80%, #d9a7a7 0%, transparent 35%),
+        linear-gradient(135deg, #f8dfc8, #e9c5bd, #f3d6b8);
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* الإطار الرئيسي */
+.card {
+    width: 90%;
+    max-width: 430px;
+    min-height: 330px;
+
+    background: rgba(255,255,255,0.42);
+    backdrop-filter: blur(12px);
+
+    border: 1px solid rgba(255,255,255,0.55);
+    border-radius: 28px;
+
+    box-shadow:
+        0 20px 50px rgba(90,55,45,0.18);
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    padding: 40px 25px;
+    position: relative;
+    z-index: 5;
+}
+
+/* العنوان */
+h1 {
+    margin: 0 0 15px;
+    color: #573c38;
+    font-size: 30px;
+    font-weight: 600;
+}
+
+p {
+    color: #765955;
+    font-size: 17px;
+    margin-bottom: 30px;
+}
+
+/* الأزرار */
+.buttons {
+    display: flex;
+    gap: 18px;
+}
+
+button {
+    border: none;
+    padding: 12px 32px;
+    border-radius: 30px;
+    font-size: 16px;
+    font-family: inherit;
+    cursor: pointer;
+    transition: 0.25s;
+}
+
+#yes {
+    background: #a96f68;
+    color: white;
+    box-shadow: 0 7px 18px rgba(100,60,55,0.2);
+}
+
+#yes:hover {
+    transform: translateY(-3px);
+    background: #985d57;
+}
+
+#no {
+    background: rgba(255,255,255,0.65);
+    color: #684c48;
+}
+
+/* الرسالة النهائية */
+#result {
+    display: none;
+    text-align: center;
+}
+
+#result h2 {
+    color: #68433f;
+    font-size: 27px;
+    margin-bottom: 12px;
+}
+
+#result p {
+    line-height: 1.8;
+}
+
+/* =========================
+   رسومات القلم الرصاص
+   ========================= */
+
+.drawing {
+    position: absolute;
+    z-index: 2;
+
+    color: rgba(85,65,60,0.48);
+
+    font-family: "Times New Roman", serif;
+
+    pointer-events: none;
+}
+
+/* وردة 1 */
+.flower1 {
+    left: 8%;
+    top: 12%;
+    transform: rotate(-12deg);
+    font-size: 75px;
+}
+
+/* وردة 2 */
+.flower2 {
+    right: 6%;
+    top: 18%;
+    transform: rotate(18deg);
+    font-size: 65px;
+}
+
+/* وردة 3 */
+.flower3 {
+    left: 12%;
+    bottom: 10%;
+    transform: rotate(15deg);
+    font-size: 70px;
+}
+
+/* وردة 4 */
+.flower4 {
+    right: 10%;
+    bottom: 9%;
+    transform: rotate(-15deg);
+    font-size: 72px;
+}
+
+/* أغصان */
+.branch {
+    position: absolute;
+    width: 130px;
+    height: 2px;
+
+    background: rgba(75,60,55,0.35);
+
+    transform-origin: left center;
+}
+
+.branch::before,
+.branch::after {
+    content: "";
+    position: absolute;
+
+    width: 38px;
+    height: 18px;
+
+    border: 1.5px solid rgba(75,60,55,0.35);
+
+    border-radius: 100% 0 100% 0;
+}
+
+.branch::before {
+    left: 30px;
+    top: -16px;
+    transform: rotate(-25deg);
+}
+
+.branch::after {
+    left: 65px;
+    top: 3px;
+    transform: rotate(25deg);
+}
+
+.branch1 {
+    left: -15px;
+    top: 45%;
+    transform: rotate(70deg);
+}
+
+.branch2 {
+    right: -20px;
+    top: 50%;
+    transform: rotate(110deg);
+}
+
+/* ورود صغيرة */
+.small-flower {
+    position: absolute;
+    font-size: 35px;
+    color: rgba(80,60,55,0.4);
+}
+
+.sf1 {
+    left: 25%;
+    top: 7%;
+    transform: rotate(-20deg);
+}
+
+.sf2 {
+    right: 25%;
+    bottom: 5%;
+    transform: rotate(20deg);
+}
+
+/* حبيبات خفيفة */
+.dot {
+    position: absolute;
+    width: 5px;
+    height: 5px;
+
+    border-radius: 50%;
+    background: rgba(100,70,60,0.25);
+
+    animation: float 5s infinite ease-in-out;
+}
+
+.d1 { left: 20%; top: 30%; }
+.d2 { right: 18%; top: 35%; animation-delay: 1s; }
+.d3 { left: 30%; bottom: 25%; animation-delay: 2s; }
+.d4 { right: 28%; bottom: 30%; animation-delay: 3s; }
+
+@keyframes float {
+    0%,100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-12px);
+    }
+}
+
+/* الشاشات الصغيرة */
+@media(max-width: 400px) {
+
+    h1 {
+        font-size: 26px;
+    }
+
+    p {
+        font-size: 15px;
+    }
+
+    .flower1,
+    .flower2,
+    .flower3,
+    .flower4 {
+        opacity: 0.65;
+        font-size: 55px;
+    }
+
+    .card {
+        min-height: 310px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<!-- رسومات بسيطة -->
+<div class="drawing flower1">✿</div>
+<div class="drawing flower2">❀</div>
+<div class="drawing flower3">✾</div>
+<div class="drawing flower4">❁</div>
+
+<div class="small-flower sf1">✧</div>
+<div class="small-flower sf2">✧</div>
+
+<div class="branch branch1"></div>
+<div class="branch branch2"></div>
+
+<div class="dot d1"></div>
+<div class="dot d2"></div>
+<div class="dot d3"></div>
+<div class="dot d4"></div>
+
+<!-- البطاقة -->
+<div class="card">
+
+    <div id="question">
+
+        <h1>فروحتي، هل تبغيني؟</h1>
+
+        <p>جاوبيني بصراحة...</p>
+
+        <div class="buttons">
+
+            <button id="no">لا</button>
+
+            <button id="yes">نعم</button>
+
+        </div>
+
+    </div>
+
+
+    <div id="result">
+
+        <h2>كنت نعرف جوابك</h2>
+
+        <p>
+      مام انا نموت عليك عمري كوني معايا مليحة والله ما تندمي وما تخمميش بزاف قلبي ليك وحدك وتضيقلي كي تزعفي وتخممي وتقنطي روحك مالا زيري نية ولدي الزين والباقي عليك +نعشق فيك لمك 
+ 
+        </p>
+
+        <div style="font-size:22px;">♥</div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+const noButton = document.getElementById("no");
+const yesButton = document.getElementById("yes");
+
+const question = document.getElementById("question");
+const result = document.getElementById("result");
+
+
+/* زر لا يتحرك عند محاولة الضغط عليه */
+noButton.addEventListener("mouseenter", moveNo);
+
+noButton.addEventListener("touchstart", function(e) {
+    e.preventDefault();
+    moveNo();
+});
+
+
+function moveNo() {
+
+    const maxX = window.innerWidth - noButton.offsetWidth - 20;
+    const maxY = window.innerHeight - noButton.offsetHeight - 20;
+
+    const x = Math.random() * maxX;
+    const y = Math.random() * maxY;
+
+    noButton.style.position = "fixed";
+    noButton.style.left = x + "px";
+    noButton.style.top = y + "px";
+
+}
+
+
+/* عند الضغط على نعم */
+yesButton.addEventListener("click", function() {
+
+    question.style.display = "none";
+    result.style.display = "block";
+
+});
+
+</script>
+
+</body>
+</html>
